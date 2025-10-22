@@ -1,4 +1,11 @@
 -- lua/plugins/init.lua
+
+-- Disable Treesitter highlight for vim files to avoid parser errors
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "vim",
+  command = "TSDisable highlight"
+})
+
 return {
   -- Core utility
   { "tpope/vim-commentary" },
@@ -156,7 +163,6 @@ return {
       vim.g.vista_default_executive = 'coc'
       vim.fn['coc#config']('languageserver', languageserver)
     end },
-  { "liuchengxu/vista.vim" },
   { "mhinz/vim-startify", config = function()
   vim.g.startify_change_to_dir = 0
   vim.g.startify_change_to_vcs_root = 0
@@ -167,51 +173,45 @@ return {
   { type = 'dir', header = { 'MRU ' .. vim.fn.getcwd() } },
   { type = 'files', header = { 'MRU' } },
     { type = 'sessions', header = { 'Sessions' } },
-    { type = 'bookmarks', header = { 'Bookmarks' } },
+  { type = 'bookmarks', header = { 'Bookmarks' } },
   { type = 'commands', header = { 'Commands' } },
   }
   vim.g.startify_bookmarks = {
       { c = '~/.config/nvim/init.lua' },
-        '~/.zshrc'
-      }
-    end },
+    '~/.zshrc'
+  }
+  end },
   {
     'AckslD/nvim-whichkey-setup.lua',
-    dependencies = {'liuchengxu/vim-which-key'},
-    config = function()
-      vim.o.timeout = true
-      vim.o.timeoutlen = 300
-      vim.g.which_key_timeout = 300
+  dependencies = {'liuchengxu/vim-which-key'},
+  config = function()
+    vim.o.timeout = true
+  vim.o.timeoutlen = 300
+  vim.g.which_key_timeout = 300
 
       local wk = require('whichkey_setup')
-      wk.config{
-        hide_statusline = false,
-        default_keymap_settings = {
-          silent = true,
-          noremap = true,
-        },
-        default_mode = 'n',
-      }
+  wk.config{
+    hide_statusline = false,
+  default_keymap_settings = {
+    silent = true,
+  noremap = true,
+  },
+  default_mode = 'n',
+  }
 
       -- Example keymap, replace with your own
-      local keymap = {
-        f = {
-          name = '+find',
-          f = { '<Cmd>Telescope find_files<CR>', 'find files' },
-        },
-      }
-      wk.register_keymap('leader', keymap)
-    end,
+  local keymap = {
+    f = {
+    name = '+find',
+  f = { '<Cmd>Telescope find_files<CR>', 'find files' },
   },
-  { "rstacruz/vim-closer" },
+  }
+  wk.register_keymap('leader', keymap)
+  end,
+  },
   { "scrooloose/nerdtree", cmd = "NERDTreeToggle" },
-  { "mhinz/vim-grepper", config = function()
-      vim.g.grepper = {}
-      vim.g.grepper.tools = {'rg', 'git'}
-      vim.g.grepper.simple_prompt = 0
-    end },
-  { "tpope/vim-dispatch" },
-  { "janko-m/vim-test" },
+  { "tpope/vim-dispatch", cmd = {"Dispatch", "Make", "Focus", "Start"} },
+  { "janko-m/vim-test", cmd = {"TestNearest", "TestFile", "TestSuite", "TestLast", "TestVisit"} },
   { 'junegunn/fzf', build = './install --bin' },
   { "junegunn/fzf.vim", init = function()
       vim.g.fzf_command_prefix = 'FZF'
@@ -251,34 +251,34 @@ return {
   { "xolox/vim-session", dependencies = {"xolox/vim-misc"}, config = function()
       vim.g.session_autoload = 'no'
     end },
-  { "SirVer/ultisnips", config = function()
-       vim.g.UltiSnipsExpandTrigger = "<tab>"
-       vim.g.UltiSnipsJumpForwardTrigger = "<tab>"
-       vim.g.UltiSnipsJumpBackwardTrigger = "<c-b>"
-       vim.g.UltiSnipsEditSplit = "vertical"
-     end
-   },
+  { "SirVer/ultisnips", event = "InsertEnter", config = function()
+  vim.g.UltiSnipsExpandTrigger = "<tab>"
+  vim.g.UltiSnipsJumpForwardTrigger = "<tab>"
+  vim.g.UltiSnipsJumpBackwardTrigger = "<c-b>"
+  vim.g.UltiSnipsEditSplit = "vertical"
+  end
+  },
 
   -- Language-specific
-  { "fatih/vim-go", build = ":GoInstallBinaries", config = function()
-       vim.g.go_list_type = "quickfix"
-       vim.g.go_fmt_command = "goimports"
-       vim.g.go_fmt_fail_silently = 1
-       vim.g.go_highlight_types = 1
-       vim.g.go_highlight_fields = 1
-       vim.g.go_highlight_functions = 1
-       vim.g.go_highlight_methods = 1
-       vim.g.go_highlight_operators = 1
-       vim.g.go_highlight_build_constraints = 1
-       vim.g.go_highlight_structs = 1
-       vim.g.go_highlight_generate_tags = 1
-       vim.g.go_highlight_space_tab_error = 0
-       vim.g.go_highlight_array_whitespace_error = 0
-       vim.g.go_highlight_trailing_whitespace_error = 1
-       vim.g.go_highlight_extra_types = 1
-     end
-   },
-  { "udalov/kotlin-vim" },
+  { "fatih/vim-go", ft = "go", build = ":GoInstallBinaries", config = function()
+  vim.g.go_list_type = "quickfix"
+  vim.g.go_fmt_command = "goimports"
+  vim.g.go_fmt_fail_silently = 1
+  vim.g.go_highlight_types = 1
+  vim.g.go_highlight_fields = 1
+  vim.g.go_highlight_functions = 1
+  vim.g.go_highlight_methods = 1
+  vim.g.go_highlight_operators = 1
+  vim.g.go_highlight_build_constraints = 1
+  vim.g.go_highlight_structs = 1
+  vim.g.go_highlight_generate_tags = 1
+  vim.g.go_highlight_space_tab_error = 0
+  vim.g.go_highlight_array_whitespace_error = 0
+  vim.g.go_highlight_trailing_whitespace_error = 1
+  vim.g.go_highlight_extra_types = 1
+  end
+  },
+  { "udalov/kotlin-vim", ft = "kotlin" },
 
   -- Optional enhancements
   { "nvim-lua/plenary.nvim" },
