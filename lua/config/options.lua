@@ -1,0 +1,63 @@
+-- lua/config/options.lua
+local o = vim.opt
+o.encoding = "utf-8"
+o.fileencoding = "utf-8"
+o.fileencodings = "utf-8,ucs-bom,gb18030,gbk,gb2312,cp936"
+o.tabstop = 4
+o.shiftwidth = 4
+o.softtabstop = 4
+o.expandtab = true
+o.hidden = true
+o.number = true
+o.mouse = "a"
+o.scrolloff = 5
+o.termguicolors = true
+o.title = true
+o.backspace = { "indent", "eol", "start" }
+o.ignorecase = true
+o.smartcase = true
+o.incsearch = true
+o.hlsearch = true
+o.modeline = false  -- Security
+o.modelines = 10
+o.laststatus = 2
+o.wrap = false
+o.gcr = "a:blinkon0"
+o.autoread = true
+o.autowriteall = true
+o.lazyredraw = true
+o.linespace = 0
+o.matchtime = 1
+o.report = 0
+o.showmatch = true
+o.splitright = true
+o.updatetime = 100
+o.timeoutlen = 700
+o.ttimeoutlen = 0
+o.inccommand = "nosplit"
+o.mousehide = true
+o.pumheight = 20
+o.completeopt = "noinsert,menuone,noselect"
+o.complete:remove("i")
+o.complete:remove("t")
+o.shortmess:append("c")
+o.listchars = { trail = "·", precedes = "«", extends = "»", eol = "↲", tab = "▸ " }
+o.list = false
+o.undofile = true
+o.undolevels = 1000
+o.undoreload = 10000
+o.showmode = false
+o.wildmode = "list:longest"
+o.fillchars = "vert:│,stl: ,stlnc: "
+o.viewoptions = "cursor,folds,slash,unix"
+o.directory = "/tmp//,."
+o.backupdir = "/tmp//,."
+o.foldenable = true
+o.foldmarker = "{,}"
+o.foldlevel = 0
+o.foldmethod = "marker"
+o.foldlevelstart = 99
+vim.g.rubycomplete_buffer_loading = 1
+vim.g.rubycomplete_classes_in_global = 1
+vim.g.rubycomplete_rails = 1
+pcall(vim.cmd, "colorscheme onedark")
