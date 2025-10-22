@@ -214,15 +214,18 @@ return {
     end, config = function()
       vim.g.fzf_path = vim.fn.expand('~/.fzf/bin/fzf')
       vim.opt.wildignore:append("*.o,*.obj,.git,*.rbc,*.pyc,__pycache__")
-      vim.env.FZF_DEFAULT_COMMAND = [[find * -path '*/\.*' -prune -o -path 'node_modules/**' -prune -o -path 'target/**' -prune -o -path 'dist/**' -prune -o  -type f -print -o -type l -print 2> /dev/null]]
 
-  if vim.fn.executable('fd') == 1 then
-    vim.env.FZF_DEFAULT_COMMAND = 'fd --exclude={.git,.idea,.vscode,.sass-cache,node_modules,build} --type f'
-  elseif vim.fn.executable('rg') == 1 then
-    vim.env.FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*" --glob "!node_modules/*"'
-  elseif vim.fn.executable('ag') == 1 then
-  vim.env.FZF_DEFAULT_COMMAND = 'ag -g ""'
-    vim.opt.grepprg = 'ag --nogroup --nocolor'
+      -- Set FZF_DEFAULT_COMMAND: prefer fd, then rg, else find
+          if vim.fn.executable('fd') == 1 then
+          vim.env.FZF_DEFAULT_COMMAND = 'fd --type f --hidden --exclude .git'
+          elseif vim.fn.executable('rg') == 1 then
+          vim.env.FZF_DEFAULT_COMMAND = 'rg --files --hidden --glob !.git/'
+          else
+            vim.env.FZF_DEFAULT_COMMAND = 'find . -name .git -prune -o -type f -print'
+        end
+
+      if vim.fn.executable('ag') == 1 then
+        vim.opt.grepprg = 'ag --nogroup --nocolor'
       end
 
   vim.g.fzf_layout = { window = { width = 0.9, height = 0.6 } }
