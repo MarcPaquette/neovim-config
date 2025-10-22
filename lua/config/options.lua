@@ -60,4 +60,3 @@ o.foldlevelstart = 99
 vim.g.rubycomplete_buffer_loading = 1
 vim.g.rubycomplete_classes_in_global = 1
 vim.g.rubycomplete_rails = 1
-pcall(vim.cmd, "colorscheme onedark")

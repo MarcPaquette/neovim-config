@@ -15,10 +15,6 @@ return {
   { "tpope/vim-sleuth" },
   { "tpope/vim-vinegar" },
   { "junegunn/vim-easy-align" },
-   { "joshdick/onedark.vim", priority = 1000, config = function()
-      vim.cmd.colorscheme("onedark")
-    end
-  },
   { "itchyny/lightline.vim", config = function()
       vim.g.lightline = {
         active = {
@@ -249,15 +245,8 @@ return {
     end },
   { "xolox/vim-misc" },
   { "xolox/vim-session", dependencies = {"xolox/vim-misc"}, config = function()
-      vim.g.session_autoload = 'no'
-    end },
-  { "SirVer/ultisnips", event = "InsertEnter", config = function()
-  vim.g.UltiSnipsExpandTrigger = "<tab>"
-  vim.g.UltiSnipsJumpForwardTrigger = "<tab>"
-  vim.g.UltiSnipsJumpBackwardTrigger = "<c-b>"
-  vim.g.UltiSnipsEditSplit = "vertical"
-  end
-  },
+  vim.g.session_autoload = 'no'
+  end },
 
   -- Language-specific
   { "fatih/vim-go", ft = "go", build = ":GoInstallBinaries", config = function()
