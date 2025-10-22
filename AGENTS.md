@@ -1,24 +1,24 @@
 # Neovim Configuration Agent Guidelines
 
 ## Build/Lint/Test Commands
-- **Lint**: ALE handles linting automatically (enabled by default)
+- **Lint**: ALE handles async linting (enabled by default)
 - **Test nearest**: `<leader>tt` or `:TestNearest`
 - **Test file**: `<leader>tf` or `:TestFile`
 - **Test suite**: `<leader>ts` or `:TestSuite`
 - **Visit last test**: `<leader>tg` or `:TestVisit`
 
 ## Architecture & Structure
-- **Plugin manager**: lazy.nvim with plugin definitions in `lua/plugins/`
-- **Config structure**: Core settings in `lua/config/` (options, keymaps, autocmds)
-- **Languages**: Go, Kotlin support with language-specific plugins
-- **LSP/Completion**: CoC (Conquer of Completion) for language server features
-- **Key navigation**: Space as leader, comma as local leader
+- **Plugin manager**: lazy.nvim with specs in `lua/plugins/` (init.lua, colors.lua, lang-go.lua)
+- **Config structure**: Core in `lua/config/` (options.lua, keymaps.lua, autocmds.lua)
+- **Languages**: Go (vim-go), Kotlin (kotlin-vim) with specific plugins
+- **LSP/Completion**: CoC for LSP and snippets; ALE for linting
+- **Navigation**: Space leader, comma local leader; FZF for files, NERDTree for tree
+- **Key components**: Fugitive/GitGutter for Git, Lightline for status, WhichKey for discovery
 
 ## Code Style Guidelines
-- **Indentation**: 4 spaces by default, expandtab enabled
-- **Language-specific**:
-  - Go: tabs (noexpandtab), 4-space width
-- **Line endings**: No trailing whitespace (use `:FixWhitespace`)
-- **Naming**: Standard vim/lua conventions, snake_case for lua functions
-- **Imports**: Organized by functionality in plugin files
-- **Error handling**: ALE for async linting, vim-test for test integration
+- **Indentation**: 4 spaces default, expandtab; Go uses tabs (noexpandtab)
+- **Formatting**: `:FixWhitespace` for trailing spaces; consistent with vim/lua standards
+- **Naming**: snake_case for Lua functions, camelCase for JS/TS, standard vim conventions
+- **Imports**: Grouped by functionality in plugin configs; use Lua require for modules
+- **Error handling**: ALE highlights; vim-test integration for running tests
+- **Files**: init.lua bootstraps; no Cursor/Claude/Windsurf/Cline/Goose/Copilot rules found
