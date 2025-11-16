@@ -93,7 +93,7 @@ map("c", "<C-P>", "<C-R>=expand('%:p:h') . '/' <CR>", { desc = "Insert current f
 map("n", "<C-p>", ":FZFFiles<CR>", { silent = true, desc = "FZF Files" })
 map("n", "<leader>ff", ":FZFFiles<CR>", { silent = true, desc = "File Search" })
 map("n", "<leader>e", ":FZFFiles<CR>", { silent = true, desc = "FZF Files" })
-map("n", "<silent> <leader>f-", ":execute(':FZFFiles ' . expand('%:h'))<CR>", { desc = "File Browser" })
+map("n", "<leader>f-", ":execute(':FZFFiles ' . expand('%:h'))<CR>", { silent = true, desc = "File Browser" })
 
 -----------------------------------------------------------------------
 -- GitGutter hunks navigation
@@ -165,12 +165,6 @@ cmd.cnoreabbrev("Gitblame", "Git blame")
 map("n", ";cp", ":set nonumber<CR>:GitGutterDisable<CR>:ALEDisable<CR>", { desc = "Copy mode (hide UI)" })
 map("n", ";pc", ":set number<CR>:ALEEnable<CR>:GitGutterEnable<CR>", { desc = "Print mode (show UI)" })
 
--- Which-key trigger mappings
-map("n", "<silent> <Leader>", ":<c-u>WhichKey '<Space>'<CR>")
-map("v", "<silent> <Leader>", ":<c-u>WhichKeyVisual '<Space>'<CR>")
-map("n", "<silent> <LocalLeader>", ":<c-u>WhichKey ','<CR>")
-map("v", "<silent> <LocalLeader>", ":<c-u>WhichKeyVisual ','<CR>")
-
 -- Which-key configuration
 vim.g.leader_key_map = {
   [' '] = {
@@ -236,5 +230,5 @@ vim.g.leader_key_map = {
 }
 
 -- Register which-key
-vim.cmd("call which_key#register('<Space>', 'g:leader_key_map')")
-
+local wk = require('whichkey_setup')
+wk.register_keymap('leader', vim.g.leader_key_map)

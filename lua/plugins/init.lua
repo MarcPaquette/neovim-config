@@ -1,13 +1,8 @@
 -- lua/plugins/init.lua
 
--- Disable Treesitter highlight for vim files to avoid parser errors
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "vim",
-  command = "TSDisable highlight"
-})
-
 return {
-  -- Core utility
+-- Core utility
+{ 'liuchengxu/vim-which-key', lazy = false },
   { "tpope/vim-commentary" },
   { "tpope/vim-fugitive" },
   { "tpope/vim-rhubarb" }, -- GitHub integration for fugitive
@@ -117,48 +112,64 @@ return {
         highlight link ALEVirtualTextStyleWarning ALEVirtualTextWarning
       ]])
     end },
-   { "neoclide/coc.nvim", branch = "release", config = function()
-      vim.g.coc_global_extensions = {
-        'coc-css@1.3.0',
-        'coc-go',
-        'coc-html',
-        'coc-json',
-        'coc-pyright',
-        'coc-rust-analyzer',
-        'coc-rls',
-        'coc-snippets',
-        'coc-tsserver@1.11.1',
-        'coc-yaml',
-      }
-
-      -- Configure language servers
-      local languageserver = {}
-
-      if vim.fn.executable('ccls') == 1 then
-        languageserver.ccls = {
-          command = "ccls",
-          filetypes = {"c", "cpp", "objc", "objcpp"},
-          rootPatterns = {".ccls", "compile_commands.json", ".vim/", ".git/", ".hg/"},
-          initializationOptions = {
-            cache = {
-              directory = "/tmp/ccls"
-            }
-          }
-        }
+   -- LSP and completion
+   { 'neovim/nvim-lspconfig' },
+   { 'williamboman/mason.nvim', config = function()
+   require('mason').setup()
+   end },
+   { 'williamboman/mason-lspconfig.nvim', config = function()
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      require('mason-lspconfig').setup({
+        ensure_installed = { 'gopls', 'ts_ls', 'pyright', 'rust_analyzer', 'bashls', 'cssls', 'html', 'jsonls', 'yamlls' }
+      })
+      local servers = { 'gopls', 'ts_ls', 'pyright', 'rust_analyzer', 'bashls', 'cssls', 'html', 'jsonls', 'yamlls' }
+      for _, server in ipairs(servers) do
+      vim.lsp.config(server, {
+      capabilities = capabilities,
+      })
+              vim.lsp.enable(server)
       end
 
-      if vim.fn.executable('bash-language-server') == 1 then
-        languageserver.bash = {
-          command = "bash-language-server",
-          args = {"start"},
-          filetypes = {"sh"},
-          ignoredRootPaths = {"~"}
-        }
+      -- LSP keymaps (removed to avoid conflicts with coc mappings in keymaps.lua)
+      vim.api.nvim_create_autocmd('LspAttach', {
+      callback = function(args)
+      -- No keymaps set here; all handled in lua/config/keymaps.lua
       end
-
-      vim.g.vista_default_executive = 'coc'
-      vim.fn['coc#config']('languageserver', languageserver)
+      })
     end },
+    { 'nvim-treesitter/nvim-treesitter', config = function()
+       require('nvim-treesitter.configs').setup({
+         ensure_installed = { 'go', 'typescript', 'javascript', 'python', 'rust', 'bash', 'lua', 'vim', 'json', 'yaml', 'html', 'css', 'kotlin', 'proto' },
+         highlight = { enable = true },
+         indent = { enable = true },
+       })
+     end },
+   { 'hrsh7th/nvim-cmp', config = function()
+      local cmp = require'cmp'
+   cmp.setup({
+   snippet = {
+   expand = function(args)
+    require('luasnip').lsp_expand(args.body)
+   end,
+   },
+   mapping = cmp.mapping.preset.insert({
+   ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+   ['<C-f>'] = cmp.mapping.scroll_docs(4),
+   ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.abort(),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        }),
+    sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+   { name = 'luasnip' },
+   }, {
+   { name = 'buffer' },
+   })
+   })
+   end },
+  { 'hrsh7th/cmp-nvim-lsp' },
+   { 'L3MON4D3/LuaSnip' },
+   { 'saadparwaiz1/cmp_luasnip' },
   { "mhinz/vim-startify", config = function()
   vim.g.startify_change_to_dir = 0
   vim.g.startify_change_to_vcs_root = 0
@@ -196,13 +207,8 @@ return {
   }
 
       -- Example keymap, replace with your own
-  local keymap = {
-    f = {
-    name = '+find',
-  f = { '<Cmd>Telescope find_files<CR>', 'find files' },
-  },
-  }
-  wk.register_keymap('leader', keymap)
+      local keymap = {}
+      wk.register_keymap('leader', keymap)
   end,
   },
   { "scrooloose/nerdtree", cmd = "NERDTreeToggle" },
