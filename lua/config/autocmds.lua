@@ -153,6 +153,19 @@ if vim.g.autosave then
 end
 
 -----------------------------------------------------------------------
+-- Quickfix
+-----------------------------------------------------------------------
+
+-- Close quickfix window after selecting an item
+autocmd("FileType", {
+  group = group("quickfix_close", {}),
+  pattern = "qf",
+  callback = function()
+    vim.keymap.set("n", "<CR>", "<CR>:cclose<CR>", { buffer = true, silent = true })
+  end
+})
+
+-----------------------------------------------------------------------
 -- FZF
 -----------------------------------------------------------------------
 
