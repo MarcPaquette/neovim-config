@@ -8,12 +8,12 @@
 - **Visit last test**: `<leader>tg` or `:TestVisit`
 
 ## Architecture & Structure
-- **Plugin manager**: lazy.nvim with specs in `lua/plugins/` (init.lua, colors.lua, lang-go.lua)
+- **Plugin manager**: lazy.nvim with specs in `lua/plugins/` (init.lua, colors.lua)
 - **Config structure**: Core in `lua/config/` (options.lua, keymaps.lua, autocmds.lua)
 - **Languages**: Go (vim-go), Kotlin (kotlin-vim) with specific plugins
-- **LSP/Completion**: CoC for LSP and snippets; ALE for linting
+- **LSP/Completion**: Native nvim-lsp via Mason + nvim-cmp + LuaSnip; ALE for linting
 - **Navigation**: Space leader, comma local leader; FZF for files, NERDTree for tree
-- **Key components**: Fugitive/GitGutter for Git, Lightline for status, WhichKey for discovery
+- **Key components**: Fugitive/GitGutter for Git, Lightline for status, folke/which-key for discovery
 
 ## Code Style Guidelines
 - **Indentation**: 4 spaces default, expandtab; Go uses tabs (noexpandtab)

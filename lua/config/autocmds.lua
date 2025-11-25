@@ -1,36 +1,55 @@
 -- lua/config/autocmds.lua
+-- Autocommands for various file types and events
+
 local group = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 
--- Remember cursor position
+-----------------------------------------------------------------------
+-- Cursor position and line
+-----------------------------------------------------------------------
+
+-- Remember cursor position when reopening files
 autocmd("BufReadPost", {
-group = group("remember_cursor", {}),
-callback = function()
-local row, col = unpack(vim.api.nvim_buf_get_mark(0, '"'))
-if row > 0 and row <= vim.api.nvim_buf_line_count(0) then
-vim.api.nvim_win_set_cursor(0, { row, col })
-end
-end,
+  group = group("remember_cursor", {}),
+  callback = function()
+    local row, col = unpack(vim.api.nvim_buf_get_mark(0, '"'))
+    if row > 0 and row <= vim.api.nvim_buf_line_count(0) then
+      vim.api.nvim_win_set_cursor(0, { row, col })
+    end
+  end,
 })
 
--- Cursor line management
-autocmd({"InsertLeave", "WinEnter"}, {
-group = group("cursorline", {}),
-callback = function() vim.opt.cursorline = true end
-})
-autocmd({"InsertEnter", "WinLeave"}, {
-group = group("cursorline", {}),
-callback = function() vim.opt.cursorline = false end
+-- Show cursorline only in active window and normal mode
+autocmd({ "InsertLeave", "WinEnter" }, {
+  group = group("cursorline", {}),
+  callback = function()
+    vim.opt.cursorline = true
+  end
 })
 
--- Syntax sync from start
+autocmd({ "InsertEnter", "WinLeave" }, {
+  group = group("cursorline", {}),
+  callback = function()
+    vim.opt.cursorline = false
+  end
+})
+
+-----------------------------------------------------------------------
+-- Syntax and display
+-----------------------------------------------------------------------
+
+-- Sync syntax highlighting from start (prevents highlighting bugs)
 autocmd("BufEnter", {
   group = group("sync_fromstart", {}),
   command = "syntax sync maxlines=200"
 })
 
--- Wrapping for txt files
-autocmd({"BufRead", "BufNewFile"}, {
+-----------------------------------------------------------------------
+-- File type settings
+-----------------------------------------------------------------------
+
+-- Text files: enable wrapping
+autocmd({ "BufRead", "BufNewFile" }, {
   group = group("wrapping", {}),
   pattern = "*.txt",
   callback = function()
@@ -40,19 +59,25 @@ autocmd({"BufRead", "BufNewFile"}, {
   end
 })
 
--- Make/cmake settings
+-- Makefiles: use tabs
 autocmd("FileType", {
   group = group("make_cmake", {}),
   pattern = "make",
-  callback = function() vim.opt_local.noexpandtab = true end
-})
-autocmd({"BufNewFile", "BufRead"}, {
-  group = group("make_cmake", {}),
-  pattern = "CMakeLists.txt",
-  callback = function() vim.opt_local.filetype = "cmake" end
+  callback = function()
+    vim.opt_local.expandtab = false
+  end
 })
 
--- Go settings
+-- CMakeLists.txt: set filetype
+autocmd({ "BufNewFile", "BufRead" }, {
+  group = group("make_cmake", {}),
+  pattern = "CMakeLists.txt",
+  callback = function()
+    vim.opt_local.filetype = "cmake"
+  end
+})
+
+-- Go: use tabs, 4-width
 autocmd("FileType", {
   group = group("go", {}),
   pattern = "go",
@@ -64,7 +89,27 @@ autocmd("FileType", {
   end
 })
 
--- Completion preview close
+-- Ruby: 2-space indent, syntax folding
+autocmd("FileType", {
+  group = group("ruby", {}),
+  pattern = "ruby",
+  callback = function()
+    vim.opt_local.tabstop = 2
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.expandtab = true
+    vim.opt_local.softtabstop = 2
+    vim.opt_local.relativenumber = false
+    vim.opt_local.cursorline = false
+    vim.opt_local.regexpengine = 1    -- Old regex engine (faster for Ruby)
+    vim.opt_local.foldmethod = "syntax"
+  end
+})
+
+-----------------------------------------------------------------------
+-- Completion
+-----------------------------------------------------------------------
+
+-- Close preview window after completion
 autocmd("CompleteDone", {
   group = group("completion_preview_close", {}),
   callback = function()
@@ -74,65 +119,59 @@ autocmd("CompleteDone", {
   end
 })
 
--- Ruby settings
-autocmd("FileType", {
-group = group("ruby", {}),
-pattern = "ruby",
-callback = function()
-  vim.opt_local.tabstop = 2
-  vim.opt_local.shiftwidth = 2
-  vim.opt_local.expandtab = true
-  vim.opt_local.softtabstop = 2
-  vim.opt_local.relativenumber = false
-  vim.opt_local.cursorline = false
-    vim.opt_local.regexpengine = 1
-    vim.opt_local.foldmethod = "syntax"
+-----------------------------------------------------------------------
+-- Editor behavior
+-----------------------------------------------------------------------
+
+-- Don't auto-insert comment leader on 'o' or 'O'
+autocmd({ "BufNewFile", "BufEnter" }, {
+  group = group("format_options", {}),
+  callback = function()
+    vim.opt.formatoptions:remove("o")
   end
 })
 
--- Basic config settings
-autocmd("BufNewFile", {
-group = group("basic_config", {}),
-callback = function() vim.opt.formatoptions:remove("o") end
-})
-autocmd("BufEnter", {
-group = group("basic_config", {}),
-callback = function() vim.opt.formatoptions:remove("o") end
-})
-
--- Reload file on focus
+-- Reload file when gaining focus (if changed externally)
 autocmd("FocusGained", {
-group = group("basic_config", {}),
-command = "checktime"
+  group = group("auto_reload", {}),
+  command = "checktime"
 })
 
--- Autosave functionality (if enabled)
+-----------------------------------------------------------------------
+-- Autosave (optional, set vim.g.autosave = true to enable)
+-----------------------------------------------------------------------
+
 if vim.g.autosave then
-autocmd("CursorHold", {
-group = group("basic_config", {}),
-callback = function()
-if vim.bo.modified then
-vim.cmd("write")
-end
-end
-})
+  autocmd("CursorHold", {
+    group = group("autosave", {}),
+    callback = function()
+      if vim.bo.modified then
+        vim.cmd("write")
+      end
+    end
+  })
 end
 
--- FZF statusline management
+-----------------------------------------------------------------------
+-- FZF
+-----------------------------------------------------------------------
+
+-- Hide statusline when FZF is open
 autocmd("FileType", {
-group = group("fzf_config", {}),
-pattern = "fzf",
-callback = function()
-  vim.opt.laststatus = 0
-  vim.opt.ruler = false
-end
-})
-autocmd("BufLeave", {
-group = group("fzf_config", {}),
-pattern = "*<buffer>",
-callback = function()
-  vim.opt.laststatus = 2
-  vim.opt.ruler = true
-end
+  group = group("fzf_config", {}),
+  pattern = "fzf",
+  callback = function()
+    vim.opt.laststatus = 0
+    vim.opt.ruler = false
+  end
 })
 
+-- Restore statusline when leaving FZF
+autocmd("BufLeave", {
+  group = group("fzf_config", {}),
+  pattern = "*<buffer>",
+  callback = function()
+    vim.opt.laststatus = 2
+    vim.opt.ruler = true
+  end
+})

@@ -1,10 +1,8 @@
 -- lua/config/keymaps.lua
+-- Key mappings (LSP keymaps are in plugins/init.lua LspAttach autocmd)
+
 local map = vim.keymap.set
 local cmd = vim.cmd
-
--- Leader keys
-vim.g.mapleader = " "
-vim.g.maplocalleader = ","
 
 -----------------------------------------------------------------------
 -- Search behavior
@@ -16,20 +14,22 @@ map("n", "N", "Nzzzv", { desc = "Prev search result centered" })
 map("n", "<C-l>", ":nohlsearch<CR>:diffupdate<CR>:syntax sync fromstart<CR><C-l>", { silent = true, desc = "Full redraw / fix highlight" })
 
 -----------------------------------------------------------------------
--- coc.nvim
+-- LuaSnip snippet navigation
 -----------------------------------------------------------------------
--- Snippet navigation
-map("i", "<C-j>", "<Plug>(coc-snippets-expand-jump)", { silent = true })
-map("v", "<C-j>", "<Plug>(coc-snippets-select)", { silent = true })
-vim.g.coc_snippet_next = "<c-j>"
-vim.g.coc_snippet_prev = "<c-k>"
+local luasnip_ok, luasnip = pcall(require, "luasnip")
+if luasnip_ok then
+  map({"i", "s"}, "<C-j>", function()
+    if luasnip.expand_or_jumpable() then
+      luasnip.expand_or_jump()
+    end
+  end, { silent = true, desc = "LuaSnip expand or jump" })
 
--- Trigger completion manually
-map("i", "<M-Space>", 'coc#refresh()', { expr = true, silent = true })
-
--- Completion navigation
-map("i", "<Tab>", 'pumvisible() ? "<C-n>" : "<Tab>"', { expr = true })
-map("i", "<S-Tab>", 'pumvisible() ? "<C-p>" : "<S-Tab>"', { expr = true })
+  map({"i", "s"}, "<C-k>", function()
+    if luasnip.jumpable(-1) then
+      luasnip.jump(-1)
+    end
+  end, { silent = true, desc = "LuaSnip jump back" })
+end
 
 -----------------------------------------------------------------------
 -- ALE
@@ -118,21 +118,9 @@ map("n", "<leader>gk", ":BCommits<CR>", { silent = true })
 map("n", "<leader>gb", ":Git blame<CR>", { silent = true })
 
 -----------------------------------------------------------------------
--- coc LSP-like keymaps
+-- Vista tagbar (non-LSP)
 -----------------------------------------------------------------------
-map("n", "gd", "<Plug>(coc-definition)", { silent = true })
-map("n", "gy", "<Plug>(coc-type-definition)", { silent = true })
-map("n", "gi", "<Plug>(coc-implementation)", { silent = true })
-map("n", "gr", "<Plug>(coc-references)", { silent = true })
-
-map("n", "<leader>la", "<Plug>(coc-codeaction)", { silent = true })
-map("v", "<leader>la", "<Plug>(coc-codeaction-selected)", { silent = true })
-map("n", "<leader>l=", "<Plug>(coc-format)", { silent = true })
-map("v", "<leader>l=", "<Plug>(coc-format-selected)", { silent = true })
-map("n", "<leader>lr", "<Plug>(coc-rename)", { silent = true })
-map("n", "<leader>lf", "<Plug>(coc-fix-current)", { silent = true })
-map("n", "<leader>lk", ':call CocAction("doHover")<CR>', { silent = true })
-map("n", "<leader>lt", ":Vista!!<CR>", { silent = true })
+map("n", "<leader>lt", ":Vista!!<CR>", { silent = true, desc = "Toggle tagbar" })
 
 -----------------------------------------------------------------------
 -- Visual alignment
@@ -165,70 +153,19 @@ cmd.cnoreabbrev("Gitblame", "Git blame")
 map("n", ";cp", ":set nonumber<CR>:GitGutterDisable<CR>:ALEDisable<CR>", { desc = "Copy mode (hide UI)" })
 map("n", ";pc", ":set number<CR>:ALEEnable<CR>:GitGutterEnable<CR>", { desc = "Print mode (show UI)" })
 
--- Which-key configuration
-vim.g.leader_key_map = {
-  [' '] = {
-    name = '+general',
-    s = { 'Startify', 'Home Buffer' },
-    f = { ':FZFCommands', 'Search commands' },
-    a = { ':FZFColors', 'Search colorschemes' },
-  },
-  o = { ':GBrowse', 'Grab Github URL for current line' },
-  t = {
-    name = '+testing',
-    t = { ':TestNearest', 'Run Nearest' },
-    ['.'] = { ':TestLast', 'Run Last' },
-    f = { ':TestFile', 'Run File' },
-    s = { ':TestSuite', 'Run Suite' },
-    g = { ':TestVisit', 'Goto last ran test' },
-  },
-  f = {
-    name = '+files',
-    f = { ':FZFFiles', 'File Search' },
-    o = { ':FZFBuffers', 'Open Buffer Search' },
-    m = { ':FZFHistory', 'Recent Files Search' },
-    ['.'] = { '<c-^>', 'Goto Last Buffer' },
-    ['-'] = 'File Browser',
-  },
-  h = {
-    name = '+hunks',
-    t = { ':GitGutterToggle', 'Toggle Git Gutter' },
-    p = { '<Plug>(GitGutterPreviewHunk)', 'Preview Hunk' },
-    s = { '<Plug>(GitGutterStageHunk)', 'Stage Hunk' },
-    u = { '<Plug>(GitGutterUndoHunk)', 'Undo Hunk' },
-  },
-  g = { name = '+git' },
-  s = {
-    name = '+search',
-    g = { 'Grepper', 'Find in directory (quickfix)' },
-    f = { ':FZFRg ', 'Find in directory (live)' },
-    t = { ':FZFTags', 'Find tags' },
-    l = { ':FZFLines', 'Find lines in open files' },
-    b = { ':FZFBlines', 'Find lines in current buffer' },
-    p = { '<Plug>CtrlSFPrompt', 'Find in directory (ctrlsf)' },
-  },
-  c = {
-    name = '+cscope',
-    s = { ':cs find s <cword>', 'Cscope Symbol' },
-    g = { ':cs find g <cword>', 'Cscope Definition' },
-    c = { ':cs find c <cword>', 'Cscope Callers' },
-    d = { ':cs find d <cword>', 'Cscope Callees' },
-    a = { ':cs find a <cword>', 'Cscope Assignments' },
-    o = { ':cs add cscope.out', 'Cscope Open Database' },
-    z = { ':!sh -xc \'\'starscope -e cscope -e ctags\'\'', 'Cscope Build Database' },
-  },
-  l = {
-    name = '+language-server',
-    k = { ':call CocAction(\"doHover\")', 'Hover' },
-    s = { ':FZFTags', 'Symbols' },
-    t = { ':Vista!!', 'Tag Bar' },
-    a = 'Code Action',
-    ['='] = 'Code Format',
-    r = 'Rename',
-    f = 'Autofix Current',
-  },
-}
-
--- Register which-key
-local wk = require('whichkey_setup')
-wk.register_keymap('leader', vim.g.leader_key_map)
+-----------------------------------------------------------------------
+-- Additional leader keymaps (which-key auto-discovers via desc)
+-----------------------------------------------------------------------
+map("n", "<leader>fo", ":FZFBuffers<CR>", { silent = true, desc = "Open buffers" })
+map("n", "<leader>fm", ":FZFHistory<CR>", { silent = true, desc = "Recent files" })
+map("n", "<leader>f.", "<C-^>", { silent = true, desc = "Last buffer" })
+map("n", "<leader>o", ":GBrowse<CR>", { silent = true, desc = "GitHub URL" })
+map("n", "<leader>ht", ":GitGutterToggle<CR>", { silent = true, desc = "Toggle GitGutter" })
+map("n", "<leader>hp", "<Plug>(GitGutterPreviewHunk)", { desc = "Preview hunk" })
+map("n", "<leader>hs", "<Plug>(GitGutterStageHunk)", { desc = "Stage hunk" })
+map("n", "<leader>hu", "<Plug>(GitGutterUndoHunk)", { desc = "Undo hunk" })
+map("n", "<leader>sf", ":FZFRg<CR>", { silent = true, desc = "Find in directory" })
+map("n", "<leader>st", ":FZFTags<CR>", { silent = true, desc = "Find tags" })
+map("n", "<leader>sl", ":FZFLines<CR>", { silent = true, desc = "Lines in open files" })
+map("n", "<leader>sb", ":FZFBLines<CR>", { silent = true, desc = "Lines in buffer" })
+map("n", "<leader>ls", ":FZFTags<CR>", { silent = true, desc = "Symbols" })

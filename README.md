@@ -1,1 +1,113 @@
 # neovim-config
+
+Personal Neovim configuration using lazy.nvim and native LSP.
+
+## Requirements
+
+- Neovim 0.10+
+- Git
+- A [Nerd Font](https://www.nerdfonts.com/) (optional, for icons)
+- `fd` or `rg` (recommended for FZF)
+
+## Installation
+
+```bash
+git clone https://github.com/YOUR_USERNAME/neovim-config ~/.config/nvim
+nvim
+```
+
+Lazy.nvim will bootstrap itself and install all plugins on first launch.
+
+## Structure
+
+```
+├── init.lua                 # Entry point, bootstraps lazy.nvim
+├── lua/
+│   ├── config/
+│   │   ├── options.lua      # Vim options
+│   │   ├── autocmds.lua     # Autocommands
+│   │   └── keymaps.lua      # Key mappings
+│   └── plugins/
+│       ├── init.lua         # Plugin specs
+│       └── colors.lua       # Colorscheme (onedark)
+```
+
+## Key Bindings
+
+**Leader**: `<Space>` | **Local Leader**: `,`
+
+### Navigation
+| Key | Action |
+|-----|--------|
+| `<C-p>` | Find files (FZF) |
+| `<M-\>` | Toggle NERDTree |
+| `<leader>fo` | Open buffers |
+| `<leader>fm` | Recent files |
+| `<leader>f.` | Last buffer |
+| `<leader>f-` | File browser (current dir) |
+
+### Search
+| Key | Action |
+|-----|--------|
+| `<leader>sf` | Find in directory (ripgrep) |
+| `<leader>st` | Find tags |
+| `<leader>sl` | Lines in open files |
+| `<leader>sb` | Lines in buffer |
+
+### LSP
+| Key | Action |
+|-----|--------|
+| `gd` | Go to definition |
+| `gy` | Go to type definition |
+| `gr` | Find references |
+| `gi` | Go to implementation |
+| `K` | Hover docs |
+| `<leader>la` | Code action |
+| `<leader>lr` | Rename symbol |
+| `<leader>l=` | Format buffer |
+| `<leader>ld` | Line diagnostics |
+| `<leader>ls` | Symbols (tags) |
+| `[d` / `]d` | Prev/next diagnostic |
+
+### Git
+| Key | Action |
+|-----|--------|
+| `<leader>gs` | Git status |
+| `<leader>gb` | Git blame |
+| `<leader>o` | Open in GitHub |
+| `]c` / `[c` | Next/prev hunk |
+| `<leader>hp` | Preview hunk |
+| `<leader>hs` | Stage hunk |
+| `<leader>hu` | Undo hunk |
+| `<leader>ht` | Toggle GitGutter |
+
+### Testing
+| Key | Action |
+|-----|--------|
+| `<leader>tt` | Test nearest |
+| `<leader>tf` | Test file |
+| `<leader>ts` | Test suite |
+
+### Editing
+| Key | Action |
+|-----|--------|
+| `<CR>` | Save file |
+| `<C-_>` | Toggle comment |
+| `<M-n>` / `<M-p>` | Next/prev ALE error |
+| `<C-j>` | Snippet expand/jump (insert) |
+| `<C-k>` | Snippet jump back (insert) |
+
+## LSP Servers
+
+Mason auto-installs: `gopls`, `ts_ls`, `pyright`, `rust_analyzer`, `bashls`, `cssls`, `html`, `jsonls`, `yamlls`, `sqls`, `lua_ls`
+
+## Plugins
+
+- **Completion**: nvim-cmp + LuaSnip
+- **LSP**: mason.nvim + nvim-lspconfig
+- **Linting**: ALE
+- **Syntax**: Treesitter
+- **Git**: Fugitive + GitGutter
+- **Files**: FZF + NERDTree
+- **Status**: Lightline
+- **Keys**: which-key.nvim
