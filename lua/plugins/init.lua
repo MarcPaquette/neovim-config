@@ -207,6 +207,20 @@ return {
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<C-e>'] = cmp.mapping.abort(),
           ['<CR>'] = cmp.mapping.confirm({ select = true }),
+          ['<Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+          ['<S-Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
         }),
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
@@ -249,13 +263,20 @@ return {
       local wk = require("which-key")
       wk.setup(opts)
       wk.add({
+        { "<leader>c", group = "cscope" },
         { "<leader>f", group = "files" },
         { "<leader>g", group = "git" },
         { "<leader>h", group = "hunks" },
         { "<leader>l", group = "lsp" },
+        { "<leader>p", group = "plugins" },
+        { "<leader>pa", group = "ale" },
+        { "<leader>pl", group = "lazy" },
+        { "<leader>pm", group = "mason" },
+        { "<leader>pn", group = "nerdtree" },
+        { "<leader>ps", group = "sessions" },
+        { "<leader>pt", group = "treesitter" },
         { "<leader>s", group = "search" },
         { "<leader>t", group = "testing" },
-        { "<leader>c", group = "cscope" },
       })
     end,
   },
@@ -341,10 +362,13 @@ return {
       vim.g.go_highlight_array_whitespace_error = 0
       vim.g.go_highlight_trailing_whitespace_error = 1
       vim.g.go_highlight_extra_types = 1
+      -- Disable vim-go features that conflict with gopls
+      vim.g.go_def_mapping_enabled = 0
+      vim.g.go_code_completion_enabled = 0
+      vim.g.go_doc_keywordprg_enabled = 0
+      vim.g.go_gopls_enabled = 0
     end
   },
   { "udalov/kotlin-vim", ft = "kotlin" },
 
-  -- Optional enhancements
-  { "nvim-lua/plenary.nvim" },
 }

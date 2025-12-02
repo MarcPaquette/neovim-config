@@ -32,10 +32,17 @@ if luasnip_ok then
 end
 
 -----------------------------------------------------------------------
--- ALE
+-- ALE (linting)
 -----------------------------------------------------------------------
 map("n", "<M-p>", "<Plug>(ale_previous_wrap)", { silent = true })
 map("n", "<M-n>", "<Plug>(ale_next_wrap)", { silent = true })
+map("n", "<leader>paa", ":ALEToggle<CR>", { silent = true, desc = "Toggle ALE" })
+map("n", "<leader>paf", ":ALEFix<CR>", { silent = true, desc = "Fix file" })
+map("n", "<leader>pal", ":ALELint<CR>", { silent = true, desc = "Lint file" })
+map("n", "<leader>pai", ":ALEInfo<CR>", { silent = true, desc = "Show info" })
+map("n", "<leader>pad", ":ALEDetail<CR>", { silent = true, desc = "Show detail" })
+map("n", "<leader>pan", "<Plug>(ale_next_wrap)", { silent = true, desc = "Next error" })
+map("n", "<leader>pap", "<Plug>(ale_previous_wrap)", { silent = true, desc = "Prev error" })
 
 -----------------------------------------------------------------------
 -- Commentary
@@ -110,12 +117,20 @@ map("n", "<leader>ts", ":TestSuite<CR>", { silent = true })
 map("n", "<leader>tg", ":TestVisit<CR>", { silent = true })
 
 -----------------------------------------------------------------------
--- Git commands
+-- Git commands (Fugitive)
 -----------------------------------------------------------------------
-map("n", "<leader>gs", ":Git<CR>", { silent = true })
-map("n", "<leader>gc", ":Commits<CR>", { silent = true })
-map("n", "<leader>gk", ":BCommits<CR>", { silent = true })
-map("n", "<leader>gb", ":Git blame<CR>", { silent = true })
+map("n", "<leader>gs", ":Git<CR>", { silent = true, desc = "Status" })
+map("n", "<leader>gc", ":FZFCommits<CR>", { silent = true, desc = "Commits (FZF)" })
+map("n", "<leader>gC", ":FZFBCommits<CR>", { silent = true, desc = "Buffer commits" })
+map("n", "<leader>gb", ":Git blame<CR>", { silent = true, desc = "Blame" })
+map("n", "<leader>gd", ":Gdiffsplit<CR>", { silent = true, desc = "Diff split" })
+map("n", "<leader>gl", ":Git log --oneline<CR>", { silent = true, desc = "Log (oneline)" })
+map("n", "<leader>gL", ":Git log<CR>", { silent = true, desc = "Log (full)" })
+map("n", "<leader>gp", ":Git push<CR>", { silent = true, desc = "Push" })
+map("n", "<leader>gP", ":Git pull<CR>", { silent = true, desc = "Pull" })
+map("n", "<leader>gf", ":Git fetch<CR>", { silent = true, desc = "Fetch" })
+map("n", "<leader>gw", ":Gwrite<CR>", { silent = true, desc = "Stage file" })
+map("n", "<leader>gr", ":Gread<CR>", { silent = true, desc = "Revert file" })
 
 -----------------------------------------------------------------------
 -- Vista tagbar (non-LSP)
@@ -128,9 +143,13 @@ map("n", "<leader>lt", ":Vista!!<CR>", { silent = true, desc = "Toggle tagbar" }
 map("x", "ga", "<Plug>(LiveEasyAlign)")
 
 -----------------------------------------------------------------------
--- NERDTree
+-- NERDTree (file explorer)
 -----------------------------------------------------------------------
 map("n", "<M-\\>", ":NERDTreeToggle<CR>", { silent = true })
+map("n", "<leader>pnn", ":NERDTreeToggle<CR>", { silent = true, desc = "Toggle tree" })
+map("n", "<leader>pnf", ":NERDTreeFind<CR>", { silent = true, desc = "Find current file" })
+map("n", "<leader>pnr", ":NERDTreeRefreshRoot<CR>", { silent = true, desc = "Refresh root" })
+map("n", "<leader>pnc", ":NERDTreeCWD<CR>", { silent = true, desc = "Set CWD as root" })
 
 -----------------------------------------------------------------------
 -- Utility commands for copying/pasting (macOS)
@@ -169,3 +188,36 @@ map("n", "<leader>st", ":FZFTags<CR>", { silent = true, desc = "Find tags" })
 map("n", "<leader>sl", ":FZFLines<CR>", { silent = true, desc = "Lines in open files" })
 map("n", "<leader>sb", ":FZFBLines<CR>", { silent = true, desc = "Lines in buffer" })
 map("n", "<leader>ls", ":FZFTags<CR>", { silent = true, desc = "Symbols" })
+
+-----------------------------------------------------------------------
+-- Plugin management (Lazy)
+-----------------------------------------------------------------------
+map("n", "<leader>pll", ":Lazy<CR>", { silent = true, desc = "Open Lazy UI" })
+map("n", "<leader>pls", ":Lazy sync<CR>", { silent = true, desc = "Sync plugins" })
+map("n", "<leader>plu", ":Lazy update<CR>", { silent = true, desc = "Update plugins" })
+map("n", "<leader>pli", ":Lazy install<CR>", { silent = true, desc = "Install missing" })
+map("n", "<leader>plc", ":Lazy clean<CR>", { silent = true, desc = "Clean unused" })
+map("n", "<leader>plk", ":Lazy check<CR>", { silent = true, desc = "Check for updates" })
+map("n", "<leader>plr", ":Lazy restore<CR>", { silent = true, desc = "Restore to lockfile" })
+map("n", "<leader>plp", ":Lazy profile<CR>", { silent = true, desc = "Profile startup" })
+map("n", "<leader>plg", ":Lazy log<CR>", { silent = true, desc = "Show changelog" })
+map("n", "<leader>plh", ":Lazy health<CR>", { silent = true, desc = "Health check" })
+
+-- Mason (LSP server management)
+map("n", "<leader>pmm", ":Mason<CR>", { silent = true, desc = "Open Mason UI" })
+map("n", "<leader>pmu", ":MasonUpdate<CR>", { silent = true, desc = "Update registries" })
+map("n", "<leader>pml", ":MasonLog<CR>", { silent = true, desc = "Show log" })
+
+-- Treesitter
+map("n", "<leader>ptt", ":TSUpdate<CR>", { silent = true, desc = "Update parsers" })
+map("n", "<leader>pti", ":TSInstallInfo<CR>", { silent = true, desc = "Install info" })
+map("n", "<leader>ptm", ":TSModuleInfo<CR>", { silent = true, desc = "Module info" })
+
+-----------------------------------------------------------------------
+-- Sessions (vim-session)
+-----------------------------------------------------------------------
+map("n", "<leader>pss", ":SaveSession<CR>", { silent = true, desc = "Save session" })
+map("n", "<leader>pso", ":OpenSession<CR>", { silent = true, desc = "Open session" })
+map("n", "<leader>psd", ":DeleteSession<CR>", { silent = true, desc = "Delete session" })
+map("n", "<leader>psc", ":CloseSession<CR>", { silent = true, desc = "Close session" })
+map("n", "<leader>psv", ":ViewSession<CR>", { silent = true, desc = "View session" })

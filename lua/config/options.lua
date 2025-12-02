@@ -63,7 +63,7 @@ o.inccommand = "nosplit"        -- Live substitution preview
 o.updatetime = 100              -- Faster CursorHold events
 o.timeoutlen = 700              -- Time for mapped sequence
 o.ttimeoutlen = 0               -- No delay for key codes
-o.lazyredraw = true             -- Don't redraw during macros
+-- Note: lazyredraw removed - causes display issues in modern Neovim
 
 -----------------------------------------------------------------------
 -- Completion
@@ -91,7 +91,7 @@ o.viewoptions = "cursor,folds,slash,unix"
 -----------------------------------------------------------------------
 o.foldenable = true
 o.foldmethod = "marker"
-o.foldmarker = "{,}"
+o.foldmarker = "{{{,}}}"
 o.foldlevel = 0
 o.foldlevelstart = 99           -- Start with all folds open
 
