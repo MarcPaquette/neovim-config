@@ -77,7 +77,7 @@ autocmd({ "BufNewFile", "BufRead" }, {
   end
 })
 
--- Go: use tabs, 4-width
+-- Go: use tabs, 4-width, format on save
 autocmd("FileType", {
   group = group("go", {}),
   pattern = "go",
@@ -86,6 +86,18 @@ autocmd("FileType", {
     vim.opt_local.tabstop = 4
     vim.opt_local.shiftwidth = 4
     vim.opt_local.softtabstop = 4
+  end
+})
+
+-- Go: format on save
+autocmd("BufWritePost", {
+  group = group("go", {}),
+  pattern = "*.go",
+  callback = function()
+    vim.fn.system("go fmt " .. vim.fn.expand("%"))
+    vim.schedule(function()
+      vim.cmd("checktime")
+    end)
   end
 })
 
