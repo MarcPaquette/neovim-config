@@ -214,6 +214,19 @@ map("n", "<leader>pti", ":TSInstallInfo<CR>", { silent = true, desc = "Install i
 map("n", "<leader>ptm", ":TSModuleInfo<CR>", { silent = true, desc = "Module info" })
 
 -----------------------------------------------------------------------
+-- Spell check
+-----------------------------------------------------------------------
+map("n", "<leader>cc", function()
+  vim.opt.spell = not vim.opt.spell:get()
+  vim.opt.spelllang = "en_us"
+end, { desc = "Toggle spell check (en_us)" })
+map("n", "<leader>cn", "]s", { desc = "Next misspelled word" })
+map("n", "<leader>cp", "[s", { desc = "Prev misspelled word" })
+map("n", "<leader>cs", "z=", { desc = "Suggest corrections" })
+map("n", "<leader>ca", "zg", { desc = "Add word to dictionary" })
+map("n", "<leader>cr", "zw", { desc = "Remove word (mark incorrect)" })
+
+-----------------------------------------------------------------------
 -- Sessions (vim-session)
 -----------------------------------------------------------------------
 map("n", "<leader>pss", ":SaveSession<CR>", { silent = true, desc = "Save session" })
