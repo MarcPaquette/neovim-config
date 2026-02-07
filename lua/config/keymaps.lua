@@ -41,8 +41,6 @@ map("n", "<leader>paf", ":ALEFix<CR>", { silent = true, desc = "Fix file" })
 map("n", "<leader>pal", ":ALELint<CR>", { silent = true, desc = "Lint file" })
 map("n", "<leader>pai", ":ALEInfo<CR>", { silent = true, desc = "Show info" })
 map("n", "<leader>pad", ":ALEDetail<CR>", { silent = true, desc = "Show detail" })
-map("n", "<leader>pan", "<Plug>(ale_next_wrap)", { silent = true, desc = "Next error" })
-map("n", "<leader>pap", "<Plug>(ale_previous_wrap)", { silent = true, desc = "Prev error" })
 
 -----------------------------------------------------------------------
 -- Commentary
@@ -133,11 +131,6 @@ map("n", "<leader>gw", ":Gwrite<CR>", { silent = true, desc = "Stage file" })
 map("n", "<leader>gr", ":Gread<CR>", { silent = true, desc = "Revert file" })
 
 -----------------------------------------------------------------------
--- Vista tagbar (non-LSP)
------------------------------------------------------------------------
-map("n", "<leader>lt", ":Vista!!<CR>", { silent = true, desc = "Toggle tagbar" })
-
------------------------------------------------------------------------
 -- Visual alignment
 -----------------------------------------------------------------------
 map("x", "ga", "<Plug>(LiveEasyAlign)")
@@ -187,7 +180,6 @@ map("n", "<leader>sf", ":FZFRg<CR>", { silent = true, desc = "Find in directory"
 map("n", "<leader>st", ":FZFTags<CR>", { silent = true, desc = "Find tags" })
 map("n", "<leader>sl", ":FZFLines<CR>", { silent = true, desc = "Lines in open files" })
 map("n", "<leader>sb", ":FZFBLines<CR>", { silent = true, desc = "Lines in buffer" })
-map("n", "<leader>ls", ":FZFTags<CR>", { silent = true, desc = "Symbols" })
 
 -----------------------------------------------------------------------
 -- Plugin management (Lazy)

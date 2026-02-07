@@ -164,7 +164,6 @@ return {
           vim.keymap.set("v", "<leader>la", vim.lsp.buf.code_action, opts("Code action"))
           vim.keymap.set("n", "<leader>l=", function() vim.lsp.buf.format({ async = true }) end, opts("Format buffer"))
           vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, opts("Rename symbol"))
-          vim.keymap.set("n", "<leader>lk", vim.lsp.buf.hover, opts("Hover documentation"))
           vim.keymap.set("n", "<leader>ld", vim.diagnostic.open_float, opts("Line diagnostics"))
           vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts("Previous diagnostic"))
           vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts("Next diagnostic"))
@@ -263,7 +262,7 @@ return {
       local wk = require("which-key")
       wk.setup(opts)
       wk.add({
-        { "<leader>c", group = "cscope" },
+        { "<leader>c", group = "spell" },
         { "<leader>f", group = "files" },
         { "<leader>g", group = "git" },
         { "<leader>h", group = "hunks" },
@@ -305,10 +304,6 @@ return {
         vim.env.FZF_DEFAULT_COMMAND = 'rg --files --hidden --glob !.git/'
       else
         vim.env.FZF_DEFAULT_COMMAND = 'find . -name .git -prune -o -type f -print'
-      end
-
-      if vim.fn.executable('ag') == 1 then
-        vim.opt.grepprg = 'ag --nogroup --nocolor'
       end
 
       vim.g.fzf_layout = { window = { width = 0.9, height = 0.6 } }
