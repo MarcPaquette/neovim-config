@@ -61,13 +61,11 @@ Lazy.nvim will bootstrap itself and install all plugins on first launch.
 | `gy` | Go to type definition |
 | `gr` | Find references |
 | `gi` | Go to implementation |
-| `K` / `<leader>lk` | Hover docs |
+| `K` | Hover docs |
 | `<leader>la` | Code action |
 | `<leader>lr` | Rename symbol |
 | `<leader>l=` | Format buffer |
 | `<leader>ld` | Line diagnostics |
-| `<leader>ls` | Symbols (tags) |
-| `<leader>lt` | Toggle Vista tagbar |
 | `[d` / `]d` | Prev/next diagnostic |
 
 ### Git
@@ -131,9 +129,19 @@ Lazy.nvim will bootstrap itself and install all plugins on first launch.
 | `<leader>pl` | Lazy (l=UI, s=sync, u=update, i=install, c=clean, k=check, r=restore, p=profile, g=log, h=health) |
 | `<leader>pm` | Mason (m=UI, u=update, l=log) |
 | `<leader>pt` | Treesitter (t=update, i=info, m=modules) |
-| `<leader>pa` | ALE (a=toggle, f=fix, l=lint, i=info, d=detail, n=next, p=prev) |
+| `<leader>pa` | ALE (a=toggle, f=fix, l=lint, i=info, d=detail) |
 | `<leader>pn` | NERDTree (n=toggle, f=find, r=refresh, c=CWD) |
 | `<leader>ps` | Sessions (s=save, o=open, d=delete, c=close, v=view) |
+
+### Spell Check
+| Key | Action |
+|-----|--------|
+| `<leader>cc` | Toggle spell check (en_us) |
+| `<leader>cn` | Next misspelled word |
+| `<leader>cp` | Previous misspelled word |
+| `<leader>cs` | Suggest corrections |
+| `<leader>ca` | Add word to dictionary |
+| `<leader>cr` | Remove word (mark incorrect) |
 
 ### Utility
 | Key | Action |
