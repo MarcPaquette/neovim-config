@@ -141,11 +141,41 @@ return {
         ensure_installed = servers
       })
 
+      -- Configure gopls with performance optimizations
+      vim.lsp.config('gopls', {
+        capabilities = capabilities,
+        settings = {
+          gopls = {
+            staticcheck = false,        -- Disable; golangci-lint handles this via ALE
+            vulncheck = "Off",          -- Disable vulnerability scanning
+            analyses = {
+              unusedparams = false,     -- Disable; golangci-lint covers this
+              shadow = false,           -- Disable; golangci-lint covers this
+            },
+            codelenses = {
+              gc_details = false,       -- Disable GC optimization details lens
+              generate = false,         -- Disable go:generate lens
+              regenerate_cgo = false,   -- Disable cgo regeneration lens
+              run_govulncheck = false,  -- Disable vulncheck lens
+              tidy = false,             -- Disable go mod tidy lens
+              upgrade_dependency = false, -- Disable dependency upgrade lens
+              vendor = false,           -- Disable vendoring lens
+            },
+            diagnosticsTrigger = "Save", -- Only run diagnostics on save, not on every keystroke
+            symbolScope = "workspace",   -- Limit symbol search to workspace (not all dependencies)
+          },
+        },
+      })
+      vim.lsp.enable('gopls')
+
+      -- Configure remaining servers with default settings
       for _, server in ipairs(servers) do
-        vim.lsp.config(server, {
-          capabilities = capabilities,
-        })
-        vim.lsp.enable(server)
+        if server ~= 'gopls' then
+          vim.lsp.config(server, {
+            capabilities = capabilities,
+          })
+          vim.lsp.enable(server)
+        end
       end
 
       -- LSP keymaps (buffer-local, only when LSP attaches)
