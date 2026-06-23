@@ -128,7 +128,7 @@ Lazy.nvim will bootstrap itself and install all plugins on first launch.
 |--------|--------|
 | `<leader>pl` | Lazy (l=UI, s=sync, u=update, i=install, c=clean, k=check, r=restore, p=profile, g=log, h=health) |
 | `<leader>pm` | Mason (m=UI, u=update, l=log) |
-| `<leader>pt` | Treesitter (t=update, i=info, m=modules) |
+| `<leader>pt` | Treesitter (t=update, i=install, m=health) |
 | `<leader>pa` | ALE (a=toggle, f=fix, l=lint, i=info, d=detail) |
 | `<leader>pn` | NERDTree (n=toggle, f=find, r=refresh, c=CWD) |
 | `<leader>ps` | Sessions (s=save, o=open, d=delete, c=close, v=view) |

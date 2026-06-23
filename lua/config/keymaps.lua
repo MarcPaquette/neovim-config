@@ -202,8 +202,8 @@ map("n", "<leader>pml", ":MasonLog<CR>", { silent = true, desc = "Show log" })
 
 -- Treesitter
 map("n", "<leader>ptt", ":TSUpdate<CR>", { silent = true, desc = "Update parsers" })
-map("n", "<leader>pti", ":TSInstallInfo<CR>", { silent = true, desc = "Install info" })
-map("n", "<leader>ptm", ":TSModuleInfo<CR>", { silent = true, desc = "Module info" })
+map("n", "<leader>pti", ":TSInstall ", { silent = false, desc = "Install parser" })
+map("n", "<leader>ptm", ":checkhealth nvim-treesitter<CR>", { silent = true, desc = "Health check" })
 
 -----------------------------------------------------------------------
 -- Spell check

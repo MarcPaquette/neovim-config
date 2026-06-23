@@ -234,12 +234,24 @@ return {
 
   {
     'nvim-treesitter/nvim-treesitter',
+    branch = 'main', -- master is frozen at Neovim 0.11; main is required for 0.12+
+    lazy = false,    -- main branch does not support lazy-loading
     build = ":TSUpdate",
     config = function()
-      require('nvim-treesitter.configs').setup({
-        ensure_installed = { 'go', 'typescript', 'javascript', 'python', 'rust', 'bash', 'lua', 'vim', 'json', 'yaml', 'html', 'css', 'kotlin', 'proto' },
-        highlight = { enable = true },
-        indent = { enable = true },
+      -- Install/update parsers (replaces ensure_installed; async, no-op if present)
+      require('nvim-treesitter').install({
+        'go', 'typescript', 'javascript', 'python', 'rust', 'bash',
+        'lua', 'vim', 'json', 'yaml', 'html', 'css', 'kotlin', 'proto',
+      })
+
+      -- Highlighting + indentation are now enabled per-buffer via Neovim core.
+      -- pcall guards filetypes without an installed parser.
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function(args)
+          if pcall(vim.treesitter.start, args.buf) then
+            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+        end,
       })
     end
   },
