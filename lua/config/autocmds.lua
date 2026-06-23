@@ -35,6 +35,18 @@ autocmd({ "InsertEnter", "WinLeave" }, {
 })
 
 -----------------------------------------------------------------------
+-- Yank highlight
+-----------------------------------------------------------------------
+
+-- Briefly highlight text when yanking
+autocmd("TextYankPost", {
+  group = group("highlight_yank", {}),
+  callback = function()
+    vim.hl.on_yank()
+  end,
+})
+
+-----------------------------------------------------------------------
 -- Syntax and display
 -----------------------------------------------------------------------
 

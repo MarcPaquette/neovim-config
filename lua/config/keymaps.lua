@@ -145,12 +145,10 @@ map("n", "<leader>pnr", ":NERDTreeRefreshRoot<CR>", { silent = true, desc = "Ref
 map("n", "<leader>pnc", ":NERDTreeCWD<CR>", { silent = true, desc = "Set CWD as root" })
 
 -----------------------------------------------------------------------
--- Utility commands for copying/pasting (macOS)
+-- Clipboard
 -----------------------------------------------------------------------
-if vim.fn.has("macunix") == 1 then
-  map("v", "<C-x>", ":!pbcopy<CR>", { silent = true })
-  map("v", "<C-c>", ":w !pbcopy<CR><CR>", { silent = true })
-end
+-- Paste over a visual selection without clobbering the clipboard
+map("x", "p", [["_dP]], { silent = true })
 
 -----------------------------------------------------------------------
 -- Abbreviations

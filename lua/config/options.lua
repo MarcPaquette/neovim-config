@@ -49,6 +49,11 @@ o.splitright = true             -- Vertical splits open right
 o.report = 0                    -- Always report changed lines
 
 -----------------------------------------------------------------------
+-- Clipboard
+-----------------------------------------------------------------------
+o.clipboard = "unnamedplus"     -- Sync all yank/delete/paste with system clipboard
+
+-----------------------------------------------------------------------
 -- Search
 -----------------------------------------------------------------------
 o.ignorecase = true
