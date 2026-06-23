@@ -149,8 +149,16 @@ return {
             staticcheck = false,        -- Disable; golangci-lint handles this via ALE
             vulncheck = "Off",          -- Disable vulnerability scanning
             analyses = {
-              unusedparams = false,     -- Disable; golangci-lint covers this
-              shadow = false,           -- Disable; golangci-lint covers this
+              -- Disable all analyses; golangci-lint handles linting via ALE
+              unusedparams = false,
+              shadow = false,
+              fieldalignment = false,
+              nilness = false,
+              unusedwrite = false,
+              useany = false,
+              ST1000 = false,
+              ST1003 = false,
+              SA5001 = false,
             },
             codelenses = {
               gc_details = false,       -- Disable GC optimization details lens
@@ -161,8 +169,20 @@ return {
               upgrade_dependency = false, -- Disable dependency upgrade lens
               vendor = false,           -- Disable vendoring lens
             },
+            hints = {
+              assignVariableTypes = false,
+              compositeLiteralFields = false,
+              compositeLiteralTypes = false,
+              constantValues = false,
+              functionTypeParameters = false,
+              parameterNames = false,
+              rangeVariableTypes = false,
+            },
             diagnosticsTrigger = "Save", -- Only run diagnostics on save, not on every keystroke
             symbolScope = "workspace",   -- Limit symbol search to workspace (not all dependencies)
+            linksInHover = false,        -- Don't compute documentation links in hover
+            -- Exclude directories from workspace scanning
+            directoryFilters = { "-vendor", "-node_modules", "-.git", "-testdata", "-bazel-bin", "-bazel-out" },
           },
         },
       })
@@ -177,6 +197,16 @@ return {
           vim.lsp.enable(server)
         end
       end
+
+      -- Disable semantic tokens for gopls (Treesitter handles highlighting)
+      vim.api.nvim_create_autocmd('LspAttach', {
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if client and client.name == 'gopls' then
+            client.server_capabilities.semanticTokensProvider = nil
+          end
+        end
+      })
 
       -- LSP keymaps (buffer-local, only when LSP attaches)
       vim.api.nvim_create_autocmd('LspAttach', {
